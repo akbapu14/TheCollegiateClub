@@ -1,0 +1,11 @@
+---
+declared-services:
+  tone-analyzer-service-experimental:
+    label: tone_analyzer
+    plan: experimental
+applications:
+- name: tone-analyzer-nodejs-ak123-09
+  command: node app.js
+  path: .
+  memory: 512MB
+  host: tone-analyzer-nodejs-ak123-09

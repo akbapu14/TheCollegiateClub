@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Tone Analyzer</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/watson-bootstrap-dark.css">
+    <link rel="stylesheet" href="/css/banner.css">
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <div class="row service-container">
+      <div class="col-lg-12 service-header">
+        <div class="row top-nav navbar-fixed-top">
+          <div class="container"><a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/" class="top-nav--logo-link">
+              <h3 class="heading left">IBM <span class="top-nav--logo-wdc">Watson Developer Cloud</span></h3></a>
+            <nav class="top-nav--nav">
+              <li class="top-nav--nav-item"><a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/services-catalog.html">Services</a></li>
+              <li class="top-nav--nav-item"><a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/">Docs</a></li>
+              <li class="top-nav--nav-item"><a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/gallery.html">App Gallery</a></li>
+              <li class="top-nav--nav-item"><a href="https://developer.ibm.com/watson/">Community</a></li>
+            </nav>
+          </div>
+        </div>
+        <div class="row header">
+          <div class="container">
+            <div class="avatar img-container col-lg-2 col-md-2 col-sm-2 hidden-xs"><img src="/images/app.png" class="service-icon"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 dialog-description">
+              <h1 style="font-size:50px;" class="service-title">The Collegiate Club</h1>
+              <p>An automated essay assistant based on word choice and tone.</p>
+              <div class="resource"><img src="/images/link.svg" class="link-icon"><strong>Resources:</strong></div>
+              <div class="resource-item-container"><a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/apis/tone-analyzer-apis.html" class="resource-item">API Overview</a><a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/tone-analyzer/" class="resource-item">Documentation</a><a href="https://github.com/watson-developer-cloud/tone-analyzer-nodejs" class="resource-item">Fork on Github</a><a href="https://bluemix.net/deploy?repository=https://github.com/watson-developer-cloud/tone-analyzer-nodejs.git" class="resource-item">Fork and Deploy on Bluemix</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h2>Input Text</h2>
+          <div class="row">
+            <p class="help-block">Choose what text you would like to analyze by using the example text, writing, or pasting your own text below. </p>
+          </div>
+          <form method="post" class="form-horizontal">
+            <div class="well">
+              <fieldset>
+                <div class="form-group row">
+                  <div class="col-lg-12">
+                    <textarea id="textArea" name="content" rows="10" placeholder="Please enter the text to analyze ..." required="true" class="form-control"></textarea>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div style="margin-bottom: 0px; padding-top: 5px;" class="form-group row">
+              <div class="col-lg-6 col-lg-push-6 col-md-6 col-md-push-6 col-sm-6 col-sm-push-6 col-xs-12"><a role="button" class="btn btn-block analyze-btn">Analyze</a></div>
+              <div class="col-lg-6 col-lg-pull-6 col-md-6 col-md-pull-6 col-sm-6 col-sm-pull-6 col-xs-12"><img src="images/reset.svg" class="icon reset-icon"><a href="/">Reset</a></div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <h2 class="output-div">Output</h2>
+          <div class="row">
+            <p class="help-block">This demo uses multiple API calls for its functionality. The <code>tone</code> API analyzes and displays the Emotion, Social, and Writing tone results.</p>
+            <p class="help-block">Then when you click a highlighted word, a call to the <code>synonyms</code> API displays suggested synonyms that either soften or strengthen the tone of that word. It also allows you to select a synonym to replace the original word, changing the tone of the message. For an in-depth explanation of this service, visit the <a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/tone-analyzer/">Documentation</a>.</p>
+          </div>
+        </div>
+      </div>
+      <div id="loading" style="display:none;" class="row">
+        <div class="loader"><img src="images/loading-indicator.gif"></div>
+      </div>
+      <div style="display: none;" class="row error">
+        <div class="col-lg-12 well">
+          <p class="errorMsg"></p>
+        </div>
+      </div>
+      <div style="display:none;" class="results row">
+        <div class="col-lg-12">
+          <div class="well">
+            <form class="form-horizontal">
+              <div role="tabpanel">
+                <ul role="tablist" class="nav nav-tabs">
+                  <li role="presentation" class="active"><a href="#percentile" aria-controls="percentile" role="tab" data-toggle="tab" class="metric-percentile">Percentile</a></li>
+                  <li role="presentation"><a href="#wordcount" aria-controls="count" role="tab" data-toggle="tab" class="metric-count">Word Count</a></li>
+                  <li role="presentation"><a href="#json" aria-controls="json" role="tab" data-toggle="tab">JSON</a></li>
+                </ul>
+              </div>
+              <div class="hr-tab"></div>
+              <fieldset>
+                <div class="form-group row">
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="tab-content">
+                      <div id="percentile" role="tabpanel" class="tab-pane">
+                        <p>
+                          Percentile compares the raw output score to a preset scorecard.
+                          For this demo the scorecard is Business Email.
+                        </p>
+                      </div>
+                      <div id="wordcount" role="tabpanel" class="tab-pane active">
+                        <p>
+                          Word Count returns the percentage of words per tone
+                          and the total number of words for each individual
+                          tone trait.    
+                        </p>
+                      </div>
+                      <div id="json" role="tabpanel" class="tab-pane">
+                        <pre class="json-div"></pre>
+                      </div>
+                      <div id="visualization"></div>
+                      <p class="text-output-label">Click on any highlighted word to see suggested synonyms.</p>
+                      <div class="text-output-div"></div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!--this is synonym pop-up panel-->
+      <div id="synonymDiv" class="hide">
+        <ul id="synonymTabs" role="tablist" class="nav nav-tabs"></ul>
+        <div id="synonymTabContent" class="tab-content"></div>
+        <div class="col-lg-4 col-lg-offset-8"><a id="closePopover" role="button" class="btn btn-block">Close</a></div>
+      </div>
+      <!--confirm dialog pop-up-->
+      <div id="useSynModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Confirm</h4>
+            </div>
+            <div class="modal-body">this is a test</div>
+            <div class="modal-footer">
+              <button type="button" data-dismiss="modal" class="btn btn-primary">Close</button>
+              <button id="confirmUseSyn" type="button" class="btn btn-primary">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/js/lib/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/lib/d3.v2.js"></script>
+    <script type="text/javascript" src="/js/config.js"></script>
+    <script type="text/javascript" src="/js/util.js"></script>
+    <script type="text/javascript" src="/js/visualization.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
+  </body>
+</html>
